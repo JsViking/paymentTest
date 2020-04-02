@@ -1,0 +1,40 @@
+input[type=text]{
+	width:327px;
+}
+select{
+	margin-right:15px;
+	width:146px;
+}
+input[type=password]{
+	width:145px;
+}
+button{
+	width: 188px;
+}
+#wrap{
+	border:1px solid #e5e5e5;
+	border-radius:4px;
+	margin:30px auto;
+	max-width:920px;
+	padding:29px;
+}
+	.header{
+		padding-bottom:64px;
+	}
+	#formPayment{
+		padding:34px 20px;
+	}
+		.cardNumber{}
+			.cardNumber input[type=text]{
+				margin-right:5px;
+				width:63px;
+			}
+		.formCell{
+			padding-bottom:25px;
+		}
+	.text{
+		margin: 24px 0;
+	}
+	.footer{
+		padding-top:20px;
+	}

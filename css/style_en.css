@@ -1,0 +1,160 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+body{
+  margin: auto;
+  padding: auto;
+}
+#wrap{
+  width: 960px;
+  height: 700px;
+  margin: auto;
+  padding: auto;
+  background: #ffffff;
+}
+.logo{
+  width: 600px;
+  height: 111px;
+  margin-bottom: 10px; 
+  background: url('../images/logo_en.gif') no-repeat;
+}
+#left{
+  float: left;
+  width: 400px;
+}
+#right{
+  font-family: Arial;
+  font-size: 10pt;
+  float: right;
+  width: 400px;
+  text-align: left;
+  color: #41403f;
+}
+span.text{
+  font-family: Arial;
+  font-size: 10pt;
+  float: left;
+  padding-right: 30px;
+  text-align: left;
+  color: #41403f;
+}
+#bonusBlock{
+  font-family: Arial;
+  font-size: 10pt;
+  float: left;
+  padding-right: 30px;
+  text-align: left;
+  color: #41403f;
+}
+span.textt{
+  font-family: Arial;
+  font-size: 8pt;
+  float: left;
+  width: 600px;
+  padding: 0px;
+  text-align: left;
+  color: #41403f;
+}
+#orderNumber,
+#amount,
+#description{
+  font-family: Arial;
+  font-size: 9pt;
+  font-weight: bold;
+  color: #41403f;
+}
+#cards{
+  width: 600px;
+  margin-top: 10px;
+}
+.cards{
+  width: 264px;
+  height: 57px;
+  margin: 0px 0 0 0;
+  padding: 0;
+  background: url('../images/cards.png') no-repeat bottom;
+}
+.visa_master{
+  width: 193px;
+  height: 70px;
+  margin: 0;
+  padding: 0;
+  background: url('../images/visa_master.jpg') no-repeat;
+}
+#buttonPayment{
+  width: 135px;
+  height: 39px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: url('../images/btn_pay_en.png') no-repeat;
+}
+#buttonPaymentSbrf{
+  width: 135px;
+  height: 39px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: url('../images/btn_online.png') no-repeat;
+}
+.img_card{
+  width: 123px;
+  height: 70px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: url('../images/card.png') no-repeat;
+}
+.text_form{
+  font-family: Arial;
+  font-size: 8pt;
+  padding: 0px;
+  text-align: left;
+  color: #41403f;
+}
+#formPayment table tbody tr td input#iPAN{
+  width: 169px;
+  height: 22px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: url('../images/fon_input.png') no-repeat;
+}
+#formPayment table tbody tr td input#iTEXT{
+  width: 169px;
+  height: 22px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: url('../images/fon_input.png') no-repeat;
+}
+#formPayment table tbody tr.rbs_hidden td input{
+  width: 84px;
+  height: 22px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: url('../images/fon_input2.png') no-repeat;
+}
+#formPayment table tbody tr td select#month{
+  width: 104px;
+  height: 22px;
+  margin: 0;
+  padding: 2px 3px;
+  text-align: center;
+  border: 0;
+  background: url('../images/fon_input2.png') no-repeat;
+}
+#formPayment table tbody tr td select#year{
+  width: 60px;
+  height: 22px;
+  margin: 0;
+  padding: 2px;
+  text-align: center;
+  border: 0;
+  background: url('../images/fon_input2.png') no-repeat;
+}
+#formPayment table tbody tr td.col1{
+  height: 20px;
+}

@@ -1,0 +1,86 @@
+select,
+input[type=text],
+input[type=password]{
+	box-sizing:border-box;
+	padding:0 1%;
+	margin:0 -1px;
+	font-size:14px;
+}
+input[type=text]{
+	width:100%;
+}
+select,
+input[type=password],
+button{
+	width:48%;
+}
+select {
+	-webkit-appearance: listbox;
+	line-height:40px;
+}
+select + select{
+	margin-left:4%;
+}
+button{
+	margin-top:3.5%;
+}
+#wrap{
+	padding:6%;
+}
+	.header{
+		padding-bottom:11.6%;
+	}
+		.bankLogo{
+			max-width: 229px;
+			min-width: 100px;
+			width: 36%;
+		}
+		.ponLogo{
+			max-width: 230px;
+			min-width: 100px;
+			width: 36%;
+		}
+	.total{
+		float:right;
+	}
+	@media screen and (max-width:400px) {
+		.total{
+			display:block;
+			float:none;
+		}
+	}
+	#formPayment{
+		padding: 3.6% 7%;
+		margin: 2.5% -7% 0;
+	}
+		#formPayment label{
+			margin:2% 0;
+		}
+		.cardNumber{
+			margin:-6px;
+		}
+			.cardNumber table{
+				border-collapse:collapse;
+				width:100%;
+			}
+				.cardNumber td{
+					border:6px solid transparent;
+					padding:0;
+					width:25%;
+				}
+					.cardNumber input[type=text]{
+						box-sizing: content-box;
+						padding: 0 10%;
+						margin:0 -1px;
+						width: 80%;
+					}
+		.formCell{
+			padding-left:1px;
+			width:100%;
+		}
+	.text{
+		margin: 3% 0;
+	}
+	.footer{
+		padding-top:6%;
+	}
