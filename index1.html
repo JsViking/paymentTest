@@ -2,20 +2,20 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=2, user-scalable=2" />
-	<title>Sberbank</title>
+	<title>Uniteller</title>
 	<link rel="SHORTCUT ICON" href="images/favicon.ico" />
 	<link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800|Open+Sans+Condensed:300,300italic,700&amp;asubset=cyrillic-ext,latin-ext" rel="stylesheet" type="text/css" media="screen" />
 	<link type="text/css" rel="stylesheet" media="all" href="css/style.css" />
 
-	<script type="text/javascript" src="https://securepayments.sberbank.ru/payment/js/jquery-1.4.2.min.js"></script>
+	<!--script type="text/javascript" src="https://securepayments.sberbank.ru/payment/js/jquery-1.4.2.min.js"></script>
 	<script type="text/javascript" src="https://securepayments.sberbank.ru/payment/js/jquery.timers-1.2.js"></script> 
 	<script type="text/javascript" src="https://securepayments.sberbank.ru/payment/js/jquery.url.js"></script> 
-	<script type="text/javascript" src="https://securepayments.sberbank.ru/payment/js/jquery.payment.js"></script>
+	<script type="text/javascript" src="https://securepayments.sberbank.ru/payment/js/jquery.payment.js"></script-->
 
-	<!-- <script type="text/javascript" src="../../js/jquery-1.4.2.min.js"></script>
+	<script type="text/javascript" src="../../js/jquery-1.4.2.min.js"></script>
 	<script type="text/javascript" src="../../js/jquery.timers-1.2.js"></script> 
 	<script type="text/javascript" src="../../js/jquery.url.js"></script> 
-	<script type="text/javascript" src="../../js/jquery.payment.js"></script> -->
+	<script type="text/javascript" src="../../js/jquery.payment.js"></script>
 
 	<script type="text/javascript" src="js/auto_move.js"></script>
 	<script type="text/javascript" src="js/postmessage.js"></script>	
@@ -144,22 +144,21 @@
 					<img src="images/logoVisa.png" class="fLeft i1" height="100%" alt="" />
 					<img src="images/logoMasterCard.png" class="fLeft i2" height="100%" alt="" />
 				</div>
+				<!--div class="clearCardData">Сбросить данные карты <a href=""></a></div-->
 				<div class="cardNumWrap">
-					<input type="tel" pattern="[0­9]*" tabindex="1" placeholder="Номер карты" value="" id="iPANmask" class="numericInput" autocomplete="off" maxlength="22" autofocus />
-					<input name="$PAN" id="iPAN" type="hidden" autocomplete="off" />
+					<input type="tel" pattern="[0­9]*" data-value="Номер карты" value="Номер карты" id="iPANmask" class="numericInput" autocomplete="off" />
+					<input name="$PAN" id="iPAN" type="hidden" />
 					<img src="images/logoVisa.png" class=" i4" height="25" alt="" />
 					<img src="images/logoMasterCard.png" class="i5" height="25" alt="" />
 				</div>
 				<p class="cardEndDate">Срок действия</p>
 				<div class="cardEndDateWrap"></div>
 				<div class="cardEndDate_mm">
-					<input type="hidden" name="MM" value="" id="month" />
-					<input type="tel" maxlength="2" tabindex="2" data-value="ММ" value="ММ" id="monthMask" class="numericInput" autocomplete="off" />
+					<input type="tel" name="MM" maxlength="2" data-value="ММ" value="ММ" id="month" class="numericInput" autocomplete="off" />
 				</div>
 				<span class="cardEndDate_separator">/</span>
 				<div class="cardEndDate_yy">
-					<input type="hidden" name="YYYY" value="" id="year" />
-					<input type="tel" maxlength="2" tabindex="3" data-value="ГГ" value="ГГ" id="yearMask" class="numericInput" autocomplete="off" />
+					<input type="tel" name="YYYY" maxlength="2" data-value="ГГ" value="ГГ" id="year" class="numericInput" autocomplete="off" />
 				</div>
 			</fieldset>
 			<fieldset class="card_2">
@@ -177,7 +176,7 @@
 						</div>
 						<div class="cvvInp">
 							<div>
-								<input type="password" maxlength="3" tabindex="4" name="$CVC" id="iCVC" class="numericInput" autocomplete="off" />
+								<input type="tel" name="$CVC" id="iCVC" class="numericInput" data-value="CVC/CVV" value="CVC/CVV" autocomplete="off" />
 							</div>
 						</div>
 						<div class="cvvHint" id="cvvHintPointer">
@@ -186,6 +185,9 @@
 					</div>
 				</div>
 			</fieldset>
+		</div>
+		<div class="checkBoxContainer">
+			<label class="customCheckBox"><input type="checkbox" name="save" />Сохранить данные карты</label>
 		</div>
 		<div class="buttonContainer">
 			<input name="SendPayment" type="hidden" id="realPayment">
