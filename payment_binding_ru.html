@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="ru-RU">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <meta name="robots" content="index, follow"/>
+    <title>Сбербанк</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="../../js/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="../../js/jquery.timers-1.2.js"></script>
+    <script type="text/javascript" src="../../js/jquery.url.js"></script>
+    <script type="text/javascript" src="../../js/jquery.payment_binding.js"></script>
+    <script type="text/javascript">
+        $(document).payment_binding({
+            visualValidationEnabled:true
+        });
+        $(document).ready(function () {
+            $(document).payment_binding("validate");
+            $(document).payment_binding("showError", "");
+        });
+    </script>
+</head>
+<body>
+<div id="body">
+
+    <form action="" method="post" id="bindingPaymentForm">
+        <div id="orderNumber" style="display:block;"></div>
+        <div id="maskedPan"></div>
+        <div id="header">
+            <div class="logo left"><a href=""></a></div>
+            <div class="info left">
+                <div class="box" id="description"></div>
+            </div>
+            <div class="logo right"><a href=""></a></div>
+            <div class="clear"></div>
+        </div>
+        <div id="errorBlock" style="color:red;"></div>
+        <div id="countdown"></div>
+        <div id="infoBlock"></div>
+        <div id="indicator" style="display:none;">
+            <label for="indicatorImage" class="formLabel">&nbsp;</label>
+
+            <div class="val" id="indicatorImage">
+                <img src="/payment/img/ajax-loader.gif" height="19" width="220" alt="indicator">
+            </div>
+        </div>
+        <div id="main">
+            <div class="column left">
+                <table>
+                    <tr>
+                        <td>Сумма платежа</td>
+                        <td class="param_1">
+                            <div id="amount"></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="column right">
+                <table>
+                    <tr>
+                        <td>CVV CVC</td>
+                        <td class="param_1"><input maxlength="4" id="cvc" type="password" autocomplete="off"/></td>
+                    </tr>
+                </table>
+                <a href="" class="hint">Что такое CVV/CVC код?</a>
+            </div>
+            <div class="clear"></div>
+        </div>
+
+        <div id="footer">
+            <div class="box">
+                <div class="icon protected">ПЛАТЕЖ БЕЗОПАСЕН</div>
+                <p>Передача информации защищена 256-битным сертификатом SSL, подписанным компанией Thawte.</p>
+            </div>
+            <input type="button" class="button" id="sendPayment"/>
+        </div>
+    </form>
+    <form id="acs" method="post" action="">
+        <input type="hidden" id="md" name="MD"/>
+        <input type="hidden" id="paReq" name="PaReq"/>
+        <input type="hidden" id="termUrl" name="TermUrl"/>
+    </form>
+</div>
+</body>
+</html>

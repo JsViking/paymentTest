@@ -1,0 +1,274 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Sberbank</title>
+    <link type="text/css" rel="stylesheet" media="all" href="css/style.css" />
+    <script type="text/javascript" src="../../js/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="../../js/jquery.timers-1.2.js"></script>
+    <script type="text/javascript" src="../../js/jquery.url.js"></script>
+    <script type="text/javascript" src="../../js/jquery-ui-1.14.custom.min.js"></script>
+    <script type="text/javascript" src="../../js/jquery.payment.js"></script>
+    <script type="text/javascript" src="../../js/jquery.page.js"></script>
+    <script type="text/javascript">
+    $(document).payment({
+        getFeeEnabled: true,
+        language: "ru",
+        messageAjaxError: "Service is not available. Please, try later.",
+        messageTimeRemaining: "Time remaining #MIN#:#SEC#",
+        orderId: "orderNumber",
+        paymentAction: "../../rest/processform.do",
+        //paymentBindingAction: "../../rest/processBindingForm.do",
+        getSessionStatusAction: "../../rest/getSessionStatus.do",
+        showErrorAction: "../../rest/showErrors.do",
+        paramNames: []
+    });
+    </script>
+</head>
+<html>
+
+<body>
+    <div id="wrap">
+        <div class="logo"></div>
+        <br />
+        <hr align="left" width="600px" />
+        <div id="left">
+            <table cellpadding="5">
+                <tbody>
+                    <tr valign="top">
+                        <td valign="top">
+                            <span class="text">Order number</span>
+                        </td>
+                        <td valign="top">
+                            <div id="orderNumber"></div>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <td valign="top">
+                            <span class="text">Total</span>
+                        </td>
+                        <td valign="top">
+                            <div id="rawAmount"></div>
+                            <div id="amount" style="display:none;"></div>
+                        </td>
+                    </tr>
+                    <tr valign="top" id="feeBlock">
+                        <td valign="top">
+                            <span class="text">Fee</span>
+                        </td>
+                        <td valign="top">
+                            <div id="feeAmount"></div>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <td valign="top" align="left" colspan="2">
+                            <div id="description"></div>
+                        </td>
+                    </tr>
+                <!--<tr valign="top">
+                        <td valign="top"  align="left" colspan="2">
+                            </div>
+                        </td>
+                    </tr>-->
+                </tbody>
+            </table>
+            <div id="numberCountdown"></div>
+            <div id="errorBlock" style="color:red;"></div>
+            <div id="infoBlock"></div>
+        </div>
+        <hr align="left" width="600px" />
+        <div id="cards">
+            <span class="text" style="margin-left:7px;">Accepted:</span>
+            <img src="images/cards.png" style="margin-top: -10px;" alt="">
+        </div>
+        <form action="" id="formBinding" style="display: none;">
+            <table cellpadding="10">
+                <tbody>
+                    <tr valign="top">
+                        <td valign="top" align="left">
+                            <span>Select card:</span>
+                        </td>
+                        <td valign="top">
+                            <select name="bindingId">
+                                <option value="" selected="selected">other..</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="rbs_hidden">
+                        <td align="left">
+                            <span>Enter CVV2  /  CVV2 code:</span>
+                            <br />
+                            <span class="text_form">CVC2 (CVV2) is three-digit number<br />
+                        specified on the reverse side of the card.</span>
+                        </td>
+                        <td>
+                            <input name="cvc" maxlength="4" type="password" autocomplete="off" />
+                        </td>
+                    </tr>
+                    <tr class="rbs_hidden">
+                        <td> </td>
+                        <td valign="top">
+                            <input value="Payment" type="button" id="buttonBindingPayment">
+                            <div id="binding_indicator" style="display:none;"><img src="../../img/ajax-loader.gif" height="19" width="220" alt="indicator"></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+        <form name="PaymentForm" action="#" method="post" id="formPayment">
+            <input type="hidden" id="expiry">
+            <input type="hidden" id="mdOrder">
+            <input type="hidden" id="location" value="/../">
+            <input type="hidden" id="language" value="ru">
+            <table cellpadding="5" style="width:300px;">
+                <tbody>
+                    <tr>
+                        <td class="col1">
+                            <span class="text">Card number</span>
+                        </td>
+                        <td>
+                            <input name="$PAN" id="iPAN" type="hidden" maxlength="19" />
+                            <input id="iPAN_sub" type="tel" style="float: left" pattern="[0-9]*" autocomplete="off" />
+                            <div></div>
+                            <div class="login-invalid" id="iPAN-validation"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            <span class="text">Expiration date</span>
+                        </td>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <select style="float: left" name="MM" id="month">
+                                            <option value="01" selected> 1 - January </option>
+                                            <option value="02"> 2 - February </option>
+                                            <option value="03"> 3 - March </option>
+                                            <option value="04"> 4 - April </option>
+                                            <option value="05"> 5 - May </option>
+                                            <option value="06"> 6 - June </option>
+                                            <option value="07"> 7 - July </option>
+                                            <option value="08"> 8 - August </option>
+                                            <option value="09"> 9 - September </option>
+                                            <option value="10">10 - October </option>
+                                            <option value="11">11 - November </option>
+                                            <option value="12">12 - December </option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select style="float: left" name="YYYY" id="year">
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <div class="login-invalid" id="year-validation"></div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1"><span class="text">Cardholder name</span></td>
+                        <td>
+                            <input style="float: left" name="TEXT" id="iTEXT" maxlength="90" type="text" autocomplete="off" />
+                            <div class="login-invalid" id="iTEXT-validation"></div>
+                            <div style="clear: both"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1" colspan="2">
+                            <span class="text_form">Cardholder name shall be entered in the Latin script, exactly as it appears on Your card.</span>
+                        </td>
+                    </tr>
+                    <tr class="rbs_hidden">
+                        <td class="col1">
+                            <span class="text">CVC2  /  CVV2 code:</span>
+                        </td>
+                        <td>
+                            <input style="float: left" name="$CVC" id="iCVC" maxlength="4" type="password" autocomplete="off" />
+                            <div class="login-invalid" id="iCVC-validation"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">
+                            <div class="img_card"></div>
+                        </td>
+                        <td><span class="text_form">CVC2 (CVV2) is three-digit number specified on the reverse side of the card.</span></td>
+                    </tr>
+                    <tr id="spasibo_block" style="display:none;">
+                        <td class="col1" colspan="2">
+                            <span class="textt">
+                                <div class="title">
+                                    <label>Pay with "SPASIBO"</label>
+                                    <span class="spasibo-icon"></span>
+                                </div>
+                                <div class="info hide">
+                                    <p class="select-bonus">Select the amount you are going to pay points "SPASIBO"</p>
+                                    <div class="row">
+                                        <div class="label-spasibo"><label for="spasibo">Points:</label></div>
+                                        <div class="wrap-slider"></div>
+                                        <div class="label-remainderAmount"><label for="remainderAmount">Rubles:</label></div>
+                                    </div>
+                                    <div class="slider-wrapper">
+                                        <input id="spasibo" type="text">
+                                        <div aria-disabled="false" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" id="spasiboSlider">
+                                            <div class="ui-slider-range ui-widget-header ui-corner-all ui-slider-range-min"></div>
+                                            <a class="ui-slider-handle ui-state-default ui-corner-all" href="#"></a>
+                                        </div>
+                                        <input id="remainderAmount" type="text" readonly="readonly">
+                                        <input value="0" name="sbrf_spasibo:amount_bonus" id="sbrf_spasibo" type="hidden">
+                                        <span id="spasibo-validation"></span>
+                                    </div>
+                                    <div class="spasibo-info">The remaining amount is paid non-cash payment with a credit card, with 1 point "SPASIBO" is equivalent to 1 ruble.</div>
+                                </div>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr class="rbs_hidden">
+                        <td class="col1" colspan="2">
+                            <span class="textt">
+                                If your bank support the technology of security providing of electronic payments
+                                Verified by VISA or MasterCard Secure Code, for providing payment you may be asked
+                                to enter a special password.
+                                Ways and means to get passwords for making internet payments
+                                You can find out in the bank that issued your card.
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1" valign="top">
+                            <div class="payment_submit">
+                                <input name="SendPayment" type="hidden" id="realPayment">
+                                <button name="SendPayment2" type="button" class="button" id="buttonPayment">Confirm</button>
+                                <input type="button" class="button" id="buttonPaymentSbrf" value="Payment using Sberbank Online" style="display: none;" />
+                            </div>
+                            <br />
+                        </td>
+                        <td>
+                            <div id="indicator" style="display:none;"><img src="../../img/ajax-loader.gif" height="19" width="220" alt="indicator"></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+        <form id="acs" method="post" action="">
+            <input type="hidden" id="MD" name="MD" />
+            <input type="hidden" id="PaReq" name="PaReq" />
+            <input type="hidden" id="TermUrl" name="TermUrl" />
+        </form>
+        <hr align="left" width="600px" />
+        <div>
+            <a href="http://usa.visa.com/personal/secure_with_visa/verified_by_visa.html" target="_blank"><img style="border:none; background:none;" src="images/visa.jpg" alt=""></a>
+            <a href="http://www.mastercardbusiness.com/mcbiz/index.jsp?template=/orphans&amp;content=securecodepopup" target="_blank"><img src="images/master.jpg" alt="" style="border:none; background:none;"></a>
+        </div>
+        <span class="textt">
+            This site supports 256-bit encryption. Confidentiality of the transmitted
+            personal information is provided by Sberbank of Russia.
+            The entered information will not be provided to third parties except as
+            required by law of the Russian Federation.
+            Making payments with bank cards performs in strict accordance
+            with the requirements of payment systems Visa Int. and MasterCard Europe Sprl.
+        </span>
+    </div>
+</body>
+</html>

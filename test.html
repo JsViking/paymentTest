@@ -1,0 +1,285 @@
+<html>
+<head>
+    <META content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <script type="text/javascript" src="../../js/jquery-1.4.2.min.js"></script>
+    <style type="text/css">
+        input {
+            width: 100%;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<h1>Регистрация платежа</h1>
+
+<div id="errorBlock"></div>
+<form id="formPayment">
+    <table width="100%">
+        <tr>
+            <td width="50%"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>
+                <fieldset>
+                    <legend>Параметры магазина</legend>
+
+                    <table width="100%">
+                        <tr>
+                            <td width="40%">
+                                <label for="location">Адрес системы (используется только для запроса)</label>
+                            </td>
+                            <td width="60%">
+                                <input type="text" id="location" value="/rebpayment/">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="UserName">Имя пользователя магазина</label>
+                            </td>
+                            <td>
+                                <input type="text" id="UserName" name="UserName" value="test-api"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="Password">Пароль магазина</label>
+                            </td>
+                            <td>
+                                <input type="text" id="Password" name="Password" value="testPwd"/>
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </td>
+            <td width="100%">
+                <fieldset>
+                    <legend>Параметры заказа</legend>
+
+                    <table width="100%">
+                        <tr>
+                            <td width="20%">
+                                <label for="Currency">Валюта</label>
+                            </td>
+                            <td width="80%">
+                                <input type="text" id="Currency" name="Currency" value="643">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="OrderNumber">Номер заказа в системе магазина</label>
+                            </td>
+                            <td>
+                                <input type="text" id="OrderNumber" name="OrderNumber" value="12345">
+                                <script type="text/javascript">
+                                    var date = new Date();
+                                    $("#OrderNumber").val("" + date.getFullYear() +
+                                            date.getMonth() +
+                                            date.getDate() +
+                                            date.getHours() +
+                                            date.getMinutes() +
+                                            date.getSeconds() +
+                                            date.getMilliseconds());
+                                </script>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="Amount">Сумма заказа (в копейках)</label>
+                            </td>
+                            <td>
+                                <input type="text" id="Amount" name="Amount" value="100">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="Language">Язык пользователя</label>
+                            </td>
+                            <td>
+                                <input type="text" id="Language" name="Language" value="ru">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="ReturnUrl">Адрес возврата</label>
+                            </td>
+                            <td>
+                                <input type="text" id="ReturnUrl" name="ReturnUrl" value="../merchants/test/finish.html">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="Description">Описание заказа</label>
+                            </td>
+                            <td>
+                                <input type="text" id="Description" name="Description" value="">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="clientId">ID клиента</label>
+                            </td>
+                            <td>
+                                <input type="text" id="clientId" name="clientId" value="">
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </td>
+        </tr>
+    </table>
+
+    <input name="pay" value="Зарегистрировать заказ (списание)" type="button" id="buttonPayment">
+    <input name="pay2" value="Зарегистрировать заказ (предавторизация)" type="button" id="buttonPayment2">
+</form>
+
+<fieldset>
+    <legend>Результаты регистрации</legend>
+    <table width="100%" id="registerResults">
+        <tr>
+            <td>Параметр</td>
+            <td>Значение</td>
+        </tr>
+    </table>
+</fieldset>
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+        var depositFlag = 1;
+        // init block
+        $('#formPayment').unbind();
+        $('#formPayment').submit(function(event) {
+            registerOrder();
+            event.stopPropagation();
+            return false;
+        });
+
+        $('#buttonPayment').click(function() {
+            $('#buttonPayment').attr('disabled', true);
+            $('#buttonPayment2').attr('disabled', true);
+            depositFlag = 1;
+            $('#formPayment').submit();
+        });
+
+        $('#buttonPayment2').click(function() {
+            $('#buttonPayment').attr('disabled', true);
+            $('#buttonPayment2').attr('disabled', true);
+            depositFlag = 0;
+            $('#formPayment').submit();
+        });
+
+        // functions
+        function getOrderStatus() {
+            $('#errorBlock').empty();
+            jQuery.ajax({
+                url: "../../rest/api/getOrderStatus.do",
+                type: 'POST',
+                cache: false,
+                data: ({
+                    orderId: $("#orderId").attr("value")
+                }),
+                dataType: 'json',
+                error: function(xhr, status, error) {
+                    $('#errorBlock').prepend('<p class="errorField" id="loginError">' + ajaxError + "</p>");
+                },
+                success: function (data) {
+                    if ('error' in data) {
+                        var message = data['error'];
+                        $('#errorBlock').prepend('<p class="errorField" id="loginError">' + message + "</p>");
+                        $('#buttonPayment').attr('disabled', true);
+                        $('#buttonPayment2').attr('disabled', true);
+                    }
+                    return true;
+                }
+            });
+        }
+
+        (function($) {
+            $.extend({
+                doGet: function(url, params) {
+                    if (params != null || params.length > 0)
+                        document.location = url + '?' + $.param(params);
+                    else
+                        document.location = url;
+                },
+                doGet: function(url) {
+                    document.location = url;
+                },
+
+                doPost: function(url, params) {
+                    var $form = $("<form method='POST'>").attr("action", url);
+                    $.each(params, function(name, value) {
+                        $("<input type='hidden'>")
+                                .attr("name", name)
+                                .attr("value", value)
+                                .appendTo($form);
+                    });
+                    $form.appendTo("body");
+                    $form.submit();
+                }
+            });
+        })(jQuery);
+
+        String.prototype.startsWith = function(prefix) {
+            return this.indexOf(prefix) === 0;
+        }
+
+        function registerOrder() {
+            $('#errorBlock').empty();
+            $('.result').remove();
+            var url = "../../rest/register.do";
+            if (depositFlag == 0)
+                url = "../../rest/registerPreAuth.do";
+            jQuery.ajax({
+                url: url,
+                type: 'POST',
+                cache: false,
+                data: ({
+                    userName: $("#UserName").attr("value"),
+                    password: $("#Password").attr("value"),
+                    currency: $("#Currency").attr("value"),
+                    orderNumber: $("#OrderNumber").attr("value"),
+                    description: $("#Description").attr("value"),
+                    clientId: $("#clientId").attr("value"),
+                    amount: $("#Amount").attr("value"),
+                    returnUrl: $("#ReturnUrl").attr("value") + "?login=" + $("#UserName").val() + "&password=" + $("#Password").val(),
+                    language: $("#Language").attr("value")
+                }),
+                dataType: 'json',
+                error: function(xhr, status, error) {
+                    $('#buttonPayment').attr('disabled', false);
+                    $('#buttonPayment2').attr('disabled', false);
+                    $('#errorBlock').prepend('<p class="errorField" id="loginError">' + error + "</p>");
+                    return true;
+                },
+                success: function (data) {
+                    $('#buttonPayment').attr('disabled', false);
+                    $('#buttonPayment2').attr('disabled', false);
+                    if (data['formUrl'] != null) {
+                        $.doGet(data['formUrl']);
+                    } else {
+                        for (var item in data) {
+                            var lineClass = 'result';
+                            if (item.startsWith('error'))
+                                lineClass = 'error result';
+                            var value = data[item];
+                            if (value.startsWith('http')) {
+                                value = '<a href="' + value + '" target="_blank">' + value + '</a>';
+                            }
+                            $('#registerResults').append('<tr class="' + lineClass + '"><td>' + item + '</td><td>' + value + '</td></tr>');
+                        }
+                    }
+                    return true;
+                }
+
+            });
+        }
+
+    });
+</script>
+</body>
+</html>

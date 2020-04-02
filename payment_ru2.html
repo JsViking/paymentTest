@@ -1,0 +1,240 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=2, user-scalable=2" />
+	<title>Сбербанк</title>
+	<link rel="SHORTCUT ICON" href="images/favicon.ico" />
+	<link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800|Open+Sans+Condensed:300,300italic,700&amp;asubset=cyrillic-ext,latin-ext" rel="stylesheet" type="text/css" media="screen" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/style.css" />
+
+	<script type="text/javascript" src="../../js/jquery-1.4.2.min.js"></script>
+	<script type="text/javascript" src="../../js/jquery.timers-1.2.js"></script> 
+	<script type="text/javascript" src="../../js/jquery.url.js"></script> 
+	<script type="text/javascript" src="../../js/jquery.payment.js"></script>
+
+	<!--script type="text/javascript" src="https://securepayments.sberbank.ru/payment/js/jquery-1.4.2.min.js"></script>
+	<script type="text/javascript" src="https://securepayments.sberbank.ru/payment/js/jquery.timers-1.2.js"></script> 
+	<script type="text/javascript" src="https://securepayments.sberbank.ru/payment/js/jquery.url.js"></script> 
+	<script type="text/javascript" src="https://securepayments.sberbank.ru/payment/js/jquery.payment.js"></script-->
+	
+	<script type="text/javascript" src="js/auto_move.js"></script>
+	<script type="text/javascript" src="js/postmessage.js"></script>
+
+	<script type="text/javascript">
+		$(document).payment({ 
+			language: "ru", 
+			messageAjaxError: "Сервис временно недоступен. Попробуйте позднее.", 
+			messageTimeRemaining: "До окончания сессии осталось #MIN#:#SEC#",
+
+			orderId: "orderNumber", 
+
+			visualValidationEnabled: true,
+
+			paymentAction: "../../rest/processform.do", 
+			paymentBindingAction: "../../rest/processBindingForm.do", 
+			getSessionStatusAction: "../../rest/getSessionStatus.do", 
+			showErrorAction: "../../rest/showErrors.do", 
+
+			updatePage: function(data) { 
+				$("#orderNumber").text(data['orderNumber']);  
+				$("#amount").text(data['amount']);  
+			}			
+		});
+
+		var cl = 0,
+			tmt;
+
+		$(window).load(function(){
+			cl = 100;
+		}).resize(function(){
+			clearTimeout(tmt);
+			tmt = setTimeout(function(){
+				var postData = { height: $('#getHeight').height() };
+	            pm({
+	              target: window.parent,
+	              type: "heightSet", 
+	              data: JSON.stringify(postData),
+	            });
+			});
+		});
+
+		function listener(msg) {	
+			var frameUrl = window.location.href,
+				checkForDomain = function(param){
+					/*if ( msg.origin.indexOf( param.split('=')[1] ) < 0 )
+						return;
+					else {*/
+						var interval;
+
+						clearInterval(interval);
+						interval = setInterval(function(){
+							if ( cl > 0 ) {
+								var postData = { height: $('#getHeight').height() };
+								clearInterval(interval);
+					            pm({
+					              target: window.parent,
+					              type: "heightSet", 
+					              data: JSON.stringify(postData),
+					            });
+							}
+						}, 100);
+					//}
+				};
+
+			/*if ( frameUrl.indexOf('?') >= 0 )
+				frameUrl = frameUrl.split('?')[1];
+			if ( frameUrl.indexOf('&') >= 0 ) {
+				frameUrl = frameUrl.split('&');
+				for ( var i = 0; i < frameUrl.length; i++ ) {
+					if ( frameUrl[i].indexOf('partnerReferrer') >= 0 )
+						checkForDomain( frameUrl[i] );
+				}
+			} else*/
+			checkForDomain( frameUrl );
+		}
+
+		if ( window.addEventListener )
+			window.addEventListener("message", listener);
+		else
+			window.attachEvent("onmessage", listener);
+
+		$(function(){
+			$('#buttonPayment').bind('click', function(){
+	            pm({
+	              target: window.parent,
+	              type: "showPreLoader", 
+	              data: JSON.stringify({}),
+	            });
+			});			
+		});
+	</script>
+</head>
+<html>
+<body>
+	<div id="wrap">
+	<div id="getHeight">
+		<div class="header">
+			<div class="headRow">
+				<p>Платежный сервис предоставлен ОАО «Сбербанк»</p>
+				<div><img src="images/logo.png" /></div>
+			</div>
+		</div>
+		<div class="body">
+			<div class="row clearfix">
+				<div class="someNum">
+					<span class="sign">Сумма списания в рублях</span>
+					<span id="amount">12300</span>
+				</div>
+				<div class="someNum">
+					<span class="sign">Номер заказа</span>
+					<span id="orderNumber">3789456</span>
+				</div>
+			</div>
+			<div id="numberCountdown">До окончания сессии осталось 2:55</div>
+
+					<div id="errorBlock" style="color:red;"></div>
+					<div id="infoBlock"></div>
+					<div id="description"></div>
+			
+			<form name="PaymentForm" action="#" method="post" id="formPayment" autocomplete="off">
+				<input type="hidden" id="expiry" > 
+				<input type="hidden" id="mdOrder" > 
+				<input type="hidden" id="location" value="/../" > 
+				<input type="hidden" id="language" value="ru" >
+				<div class="fieldSetContainer clearfix">
+					<fieldset class="card_1">
+						<label class="formField cardNum clearfix">
+							<p>Номер карты</p>
+							<div class="likeTable">
+								<div class="inputHolder">
+									<input name="$PAN" id="iPAN" maxlength="19" type="hidden" autocomplete="off" />
+									<input id="iPANmask" type="tel" pattern="[0­9]*" />
+								</div>
+								<div class="cardLogos">
+									<div class="cardLogosContainer">
+										<img src="images/cardLogo_2.png" width="40" data-direct="left" class="cardLogo_4" data-index="4" alt="" />
+										<img src="images/cardLogo_1.png" width="32" data-direct="right" class="cardLogo_5" data-index="5" alt="" />
+									</div>
+								</div>
+							</div>
+						</label>
+						<div class="formField cardDate clearfix" style="z-index: 10;">
+							<p>Срок действия карты</p>
+							<select name="MM" id="month">
+								<option value="01" selected>01 Январь</option>
+								<option value="02">02 Февраль</option>
+								<option value="03">03 Март</option>
+								<option value="04">04 Апрель</option>
+								<option value="05">05 Май</option>
+								<option value="06">06 Июнь</option>
+								<option value="07">07 Июль</option>
+								<option value="08">08 Август</option>
+								<option value="09">09 Сентябрь</option>
+								<option value="10">10 Октябрь</option>
+								<option value="11">11 Ноябрь</option>
+								<option value="12">12 Декабрь</option>
+							</select>
+							<select name="YYYY" id="year">
+								<option value="2015" selected>2015</option>
+								<option value="2016">2016</option>
+								<option value="2017">2017</option>
+								<option value="2018">2018</option>
+								<option value="2019">2019</option>
+								<option value="2020">2020</option>
+								<option value="2021">2021</option>
+								<option value="2022">2022</option>
+								<option value="2023">2023</option>
+							</select>
+						</div>
+						<label class="formField" style="display: none;">
+							<p>Владелец карты</p>
+							<input value="test user from widget" name="TEXT" id="iTEXT" maxlength="90" type="text" autocomplete="off" />
+						</label>
+					</fieldset>
+					<fieldset class="card_2">
+						<div class="darkLine"></div>
+						<div class="cvvLine">
+							<div class="cvvExample formField">
+								<p>&nbsp;</p>
+								<div>
+									<b>0000</b>
+									<b>000</b>
+									<i></i>
+								</div>
+							</div>
+							<div class="cvvContainer formField">
+								<div>
+									<p class="dIBlock"><span class="abbr" data-id="cvc">CVC/CVV</span><b data-id="cvc" class="showPopupAbbr"></b></p>
+									<input name="$CVC" id="iCVC" maxlength="3" type="password" autocomplete="off" value="" />
+									<input id="cvcMask" type="tel" maxlength="3" autocomplete="off" />
+								</div>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+				<div class="buttonContainer">
+					<input name="SendPayment" type="hidden" id="realPayment">
+					<button name="SendPayment2" type="button" class="button" id="buttonPayment">Оплатить</button>
+				</div>
+				<div id="popupAbbr" class="cardnum">
+					<a href="javascript:void(0)" class="closeAbbrPopup"></a>
+					<div id="abbrPopuptext"></div>
+				</div>				
+			</form>
+			<p class="about256" style="display:none !important">Настоящий сайт поддерживает 256-битное шифрование. Конфиденциальность сообщаемой персональной информации обеспечивается ОАО "Сбербанк России". Введенная информация не будет предоставлена третьим лицам за исключением случаев, предусмотренных законодательством РФ. Проведение платежей по банковским картам осуществляется в строгом соответствии с требованиями платежных систем Visa Int. и MasterCard Europe Sprl.</p>
+			<div class="clearfix verify" style="display:none !important">
+				<img src="images/verify-master.png" style="float: left" />
+				<img src="images/verify-visa.png" style="float: right" />
+			</div>
+		</div>
+
+		<form id="acs" method="post" action="">
+			<input type="hidden" id="MD" name="MD" />
+			<input type="hidden" id="PaReq" name="PaReq" />
+			<input type="hidden" id="TermUrl" name="TermUrl" />
+		</form>		
+	</div>
+	</div>
+</body>
+
+</html>

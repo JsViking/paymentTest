@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Error!</title>
+	<link type="text/css" rel="stylesheet" media="all" href="css/fonts.css">
+	<link type="text/css" rel="stylesheet" media="all" href="css/style.css">
+	<link type="text/css" rel="stylesheet" media="all" href="css/mobile.css">
+	<script type="text/javascript" src="../../js/jquery-1.4.2.min.js"></script> 
+	<script type="text/javascript" src="../../js/jquery.timers-1.2.js"></script> 
+	<script type="text/javascript" src="../../js/jquery.url.js"></script> 
+	<script type="text/javascript" src="../../js/jquery.payment.js"></script>
+		
+	<script type="text/javascript"> 
+	var lang = "en"; 
+	</script>
+</head>
+<html>
+	<body>
+		<div id="wrap">
+			<div class="header">
+				<img src="images/ponlogo.png" class="ponLogo" />
+				<img src="images/logo.png" class="bankLogo" />
+			</div>
+			
+			<div id="errorBlock" style="color:#660066;margin-left:15px;font-size:18px;">
+				<img class="warning" src="images/warning.png" />Sorry, payment cannot be complete
+			</div>
+			
+			<form name="errorForm" action="#" method="post" id="errorForm"> 
+				<input type="hidden" id="language" value="en" type="hidden"> 
+			</form>
+			
+			<p class="text">This site supports 256-bit encryption. Confidentiality of the transmitted personal information is provided by Sberbank of Russia. The entered information will not be provided to third parties except as required by law of the Russian Federation. Making payments with bank cards performs in strict accordance with the requirements of payment systems Visa Int. and MasterCard Europe Sprl.</p>
+			
+			<div class="footer">
+				<div class="visa dIBlock"></div>
+				<div class="master dIBlock"></div>
+			</div>
+		</div>
+	</body>
+</html>
