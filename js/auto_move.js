@@ -269,7 +269,7 @@ $(function(){
             $this.val( $this.attr('data-value') );
             $this.removeClass('active');
         }
-    }).bind('keyup', function(e){
+    }).bind('input', function(e){
         var $this = $(this),
             $parent = $this.parent(),
             val = $this.val(),
@@ -344,7 +344,7 @@ $(function(){
                 setCursorPos(DOMobj, lastCursorPos);
 
             $('#iPAN').val( newVal.replace(/\s/g, '') );
-            $('#iPAN').trigger('keyup');
+            $('#iPAN').trigger('input');
 
             showCardLogo( val.substring(0,1) );
 
